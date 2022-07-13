@@ -72,8 +72,3 @@ tr3.accept_route(rt)
 tr4.accept_route(rt)
 tr1.go_to_next_station
 =end
-
-
-
-
-

@@ -29,13 +29,3 @@ st2 = Station.new('Derbishki')
 st3 = Station.new('Kulseitovo')
 st4 = Station.new('Chipchugi')
 =end
-
-
-
-
-
-
-
-
-
-
