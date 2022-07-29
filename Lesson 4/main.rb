@@ -207,7 +207,7 @@ class RailRoad
     return data_error if selected_station.nil?
 
     selected_route.delete_station(selected_station)
-    puts "Station \"#{selected_station.title}\" delitet the the route. Current route:"
+    puts "Station \"#{selected_station.title}\" deletet from the route. Current route:"
     selected_route.show_stations
   end
 
