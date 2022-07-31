@@ -1,6 +1,5 @@
 class Train
-
-  attr_reader :car_list, :speed, :route, :station, :type, :current_station
+  attr_reader :car_list, :speed, :route, :station, :type, :current_station, :number
 
   def initialize(number)
     @number = number
@@ -72,16 +71,3 @@ class Train
   end
 
 end
-
-=begin
-load './train.rb'
-tr1 = Train.new("tr1", 'cargo', 44)
-tr2 = Train.new("tr2", 'cargo', 56)
-tr3 = Train.new("tr3", 'passenger', 12)
-tr4 = Train.new("tr4", 'passenger', 15)
-tr1.accept_route(rt)
-tr2.accept_route(rt)
-tr3.accept_route(rt)
-tr4.accept_route(rt)
-tr1.go_to_next_station
-=end

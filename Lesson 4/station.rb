@@ -19,13 +19,8 @@ class Station
     train_list.each { |train| hash[train.type] += 1 }
     hash
   end
+
+  def show_trains
+    train_list.map { |train| "Train number #{train.number} - type: #{train.type}" }.join(", ")
+  end
 end
-
-
-=begin
-load './station.rb'
-st1 = Station.new('Kazan')
-st2 = Station.new('Derbishki')
-st3 = Station.new('Kulseitovo')
-st4 = Station.new('Chipchugi')
-=end

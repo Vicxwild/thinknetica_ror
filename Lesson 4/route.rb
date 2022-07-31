@@ -21,10 +21,3 @@ class Route
     stations.index(station)
   end
 end
-
-=begin
-load './route.rb'
-rt = Route.new(st1, st4)
-rt.add_station(st2)
-rt.add_station(st3)
-=end
