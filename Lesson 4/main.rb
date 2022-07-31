@@ -9,7 +9,7 @@ require_relative "car/passenger_car"
 
 class RailRoad
   def initialize
-    @stations = {} #why hashes, not arrays?
+    @stations = {}
     @routes = {}
     @trains = {}
   end
@@ -306,7 +306,7 @@ class RailRoad
     selection = gets.chomp
     selected_train = selected_train(selection)
 
-    return data_error if selected_train.current_station.nil? || selected_train.previous_station.nil? #twice??
+    return data_error if selected_train.current_station.nil? || selected_train.previous_station.nil?
 
     selected_train.go_to_previous_station
     puts "Train number #{selected_train.number} moved from \"#{selected_train.next_station.title}\" station to \"#{selected_train.current_station.title}\" station"
@@ -373,17 +373,9 @@ class RailRoad
   def data_error
     puts "Data error!"
   end
-
-
-
 end
 
 #irb -r ./main.rb
 rr = RailRoad.new
 rr.load_seeds
 rr.menu
-
-
-
-
-
