@@ -15,6 +15,8 @@ class RailRoad
   end
 
   def menu
+    load_seeds
+
     loop do
       puts "---------------------------------------------------------------"
       puts "Choose what you want to do:"
@@ -69,7 +71,7 @@ class RailRoad
   end
 
   # скрываем реализацию методов и доступ к переменным вне класса
-  private
+  #private
 
   attr_reader :stations, :routes, :trains
 
@@ -378,4 +380,4 @@ end
 #irb -r ./main.rb
 rr = RailRoad.new
 rr.load_seeds
-rr.menu
+rr.move_train_back
