@@ -1,20 +1,20 @@
-require_relative "../modules/instance_counter"
+require_relative "modules/instance_counter"
 
 class Station
   include InstanceCounter
 
   attr_reader :train_list, :title
 
-  @@all_stations = []
+  @@stations = []
 
   def self.all
-    @@all_stations.each { |station| station }
+    @@stations.each { |station| station }
   end
 
   def initialize(title)
     @title = title
     @train_list = []
-    @@all_stations << self
+    @@stations << self
     register_instance
   end
 

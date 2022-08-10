@@ -380,6 +380,6 @@ end
 #irb -r ./main.rb
 rr = RailRoad.new
 rr.load_seeds
-rr.menu
+#rr.menu
 
-#p CargoTrain.instances
+p Station.instances

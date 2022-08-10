@@ -1,4 +1,4 @@
-require_relative "../modules/instance_counter"
+require_relative "modules/instance_counter"
 
 class Route
   include InstanceCounter
