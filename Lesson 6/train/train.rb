@@ -21,11 +21,11 @@ class Train
   def initialize(number, type = nil)
     @number = number
     @type = type
-    @car_list = []
     @speed = 0
+    validate!
+    @car_list = []
     @@all_trains[number] = self
     register_instance
-    validate!
   end
 
   def gain_speed(speed)
@@ -92,8 +92,10 @@ class Train
   end
 
   def validate!
-    raise "Input error. Use letters and numbers in the format: XXX-XX/XXXXX" if @number !~ NUMBER_PATTERN
-    raise "Input error. Use :cargo or :passenger" if @type !~ TYPE_PATTERN
-    raise "The speed must be greater than zero" if @speed.negative?
+    errors = []
+    errors << "Input error. Use letters and numbers in the format: XXX-XX/XXXXX" if @number !~ NUMBER_PATTERN
+    errors << "Input error. Use :cargo or :passenger" if @type !~ TYPE_PATTERN
+    errors << "The speed must be greater than zero" if @speed.negative?
+    raise errors.join(". ") unless errors.empty?
   end
 end
