@@ -1,5 +1,3 @@
-#require_relative "car"
-
 class CargoCar < Car
   attr_reader :total_volume, :occupied_volume
 
@@ -22,6 +20,3 @@ class CargoCar < Car
 
   attr_writer :total_volume, :occupied_volume
 end
-
-
-#p CargoCar.new(10).free_volume

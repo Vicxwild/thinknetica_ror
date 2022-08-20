@@ -75,7 +75,7 @@ class RailRoad
   end
 
   # скрываем реализацию методов и доступ к переменным вне класса
-  private
+  #private
 
   attr_reader :stations, :routes, :trains
 
@@ -104,10 +104,10 @@ class RailRoad
     trains['CAR-43'] = CargoTrain.new('CAR-43')
     trains['CAR-78'] = CargoTrain.new('CAR-78')
 
-    1.times { trains['PAS-71'].add_car(PassengerCar.new) }
-    2.times { trains['PAS-52'].add_car(PassengerCar.new) }
-    3.times { trains['CAR-43'].add_car(CargoCar.new) }
-    4.times { trains['CAR-78'].add_car(CargoCar.new) }
+    #1.times { trains['PAS-71'].add_car(PassengerCar.new(10)) }
+    2.times { trains['PAS-52'].add_car(PassengerCar.new(10)) }
+    3.times { trains['CAR-43'].add_car(CargoCar.new(10)) }
+    4.times { trains['CAR-78'].add_car(CargoCar.new(10)) }
 
     trains['PAS-71'].accept_route(routes['Kazan - Moscow'])
     trains['PAS-52'].accept_route(routes['Moscow - Kazan'])
@@ -268,12 +268,33 @@ class RailRoad
 
     case selected_train.type
       when :cargo
-        selected_train.add_car(CargoCar.new)
+        puts "Enter the value of the volume of the car (the permissible range of values is 60-100 cubic meters)"
+
+        volume = gets.chomp.to_i
+
+        if volume.between?(60,100)
+          selected_train.add_car(CargoCar.new(volume))
+        else
+          raise ArgumentError, "An invalid volume value has been entered. The permissible range is 60-100"
+        end
+
       when :passenger
-        selected_train.add_car(PassengerCar.new)
+        puts "Enter the value of the number of seats in the car (the acceptable range of values is 30-120 places)"
+
+        seats = gets.chomp.to_i
+
+        if seats.between?(30,120)
+          selected_train.add_car(PassengerCar.new(seats))
+        else
+          raise ArgumentError, "Invalid places value entered. The acceptable range is 30-120"
+        end
     end
 
     puts "The carriage has been added to train number #{selected_train.number}. Total cars in the train: #{selected_train.car_list.count}"
+
+    rescue ArgumentError => e
+    puts e.message
+    retry
   end
 
   def unhook_wagon
@@ -340,6 +361,19 @@ class RailRoad
     puts selected_station.show_trains
   end
 
+  def cars_list
+    return data_error if trains_list.empty?
+
+    puts "Enter the number of the required car"
+    puts train_list_with_index
+
+    selection = gets.chomp
+    selected_train = selected_train(selection)
+
+    raise "There are no attached cars on the train #{selected_train.number}" if selected_train.car_list.empty?
+    selected_train.each_car(&information_about_cars)
+  end
+
   def station_list
     stations.keys
   end
@@ -387,12 +421,9 @@ end
 
 #irb -r ./main.rb
 rr = RailRoad.new
-#rr.load_seeds
+rr.load_seeds
 #rr.menu
-car = CargoCar.new(10.0)
-car.fill_a_volume(9.0)
-p car.free_volume
 
-
+rr.cars_list
 
 

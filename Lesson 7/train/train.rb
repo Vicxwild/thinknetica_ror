@@ -75,6 +75,27 @@ class Train
     route.stations[station_id - 1]
   end
 
+  def each_car(&block)
+    return to_enum(:each_car) unless block_given?
+    car_list.each { |car| yield(car) }
+  end
+
+  def information_about_cars
+    lambda(car) do
+      case car.type
+        when :cargo
+          free = car.free_volume
+          occupied = car.occupied_volume
+        when :passenger
+          free = car.available_seats
+          occupied = car.occupied_seats
+      end
+
+      i = 0
+      "#{i += 1}, #{car.type}, free: #{free}, occupied: #{occupied}"
+    end
+  end
+
   private
 
   # скрываем для вызова метода изменения скорости исключительно в контексте собственного объекта

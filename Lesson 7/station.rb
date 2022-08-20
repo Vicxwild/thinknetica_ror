@@ -41,6 +41,11 @@ class Station
     train_list.map { |train| "Train number #{train.number} - type: #{train.type}" }.join(", ")
   end
 
+  def each_train
+    return to_enum(:each_train) unless block_given?
+    train_list.each { |train| yield(train) }
+  end
+
   protected
   def validate!
     raise "Input error. To create a title, use only letters, numbers and spaces; the length of the title should not exceed 20 characters" if @title !~ TITLE_PATTERN
