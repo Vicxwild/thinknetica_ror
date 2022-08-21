@@ -1,11 +1,8 @@
 require_relative "car"
 
 class CargoCar < Car
-  attr_reader :total_volume, :occupied_volume
-
   def initialize(total_volume)
-    @total_volume = total_volume
-    super(:cargo)
+    super(:cargo, total_volume)
     @occupied_volume = 0.0
     validate!
   end
@@ -15,16 +12,8 @@ class CargoCar < Car
     self.occupied_volume += volume
   end
 
-  def free_volume
-    total_volume - occupied_volume
-  end
-
   private
-
-  attr_writer :total_volume, :occupied_volume
-
   def validate!
     raise ArgumentError, "The permissible range of volume is 60-100" unless @total_volume.between?(60,100)
   end
 end
-

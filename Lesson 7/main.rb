@@ -379,7 +379,7 @@ class RailRoad
         when :cargo
           puts "Car number: #{index}, car type: #{car.type}, free volume: #{car.free_volume} m3, occupied volume: #{car.occupied_volume} m3"
         when :passenger
-          puts "Car number: #{index}, car type: #{car.type}, free seats: #{car.available_seats}, occupied seats: #{car.occupied_seats}"
+          puts "Car number: #{index}, car type: #{car.type}, free seats: #{car.free_volume}, occupied seats: #{car.occupied_volume}"
       end
     end
 
@@ -428,8 +428,12 @@ class RailRoad
         puts "Car added #{volume} m3, free volume #{selected_car.free_volume} m3"
       when :passenger
         selected_car.take_a_seat
-        puts "The seat is occupied, there are #{selected_car.available_seats} empty seats"
+        puts "The seat is occupied, there are #{selected_car.free_volume} empty seats"
     end
+
+    rescue RuntimeError => e
+    puts e.message
+    retry
   end
 
   def station_list
