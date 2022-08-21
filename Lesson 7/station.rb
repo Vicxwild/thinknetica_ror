@@ -43,7 +43,7 @@ class Station
 
   def each_train
     return to_enum(:each_train) unless block_given?
-    train_list.each { |train| yield(train) }
+    train_list.each.with_index(1) { |train, index| yield(train, index) }
   end
 
   protected

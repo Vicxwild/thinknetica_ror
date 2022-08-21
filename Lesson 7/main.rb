@@ -29,11 +29,14 @@ class RailRoad
       puts "Enter 5 to delete a station in the route"
       puts "Enter 6 to assign a route to the train"
       puts "Enter 7 to add a carriage to the train"
-      puts "Enter 8 to unhook the car from the train"
-      puts "Enter 9 to move the train along the route forward one station"
-      puts "Enter 10 to move the train along the route back to one station"
-      puts "Enter 11 to view the list of stations"
-      puts "Enter 12 to view the list of trains at the station"
+      puts "Enter 8 to take a seat/volume in the train car"
+      puts "Enter 9 to unhook the car from the train"
+      puts "Enter 10 to move the train along the route forward one station"
+      puts "Enter 11 to move the train along the route back to one station"
+      puts "Enter 12 to view the list of stations"
+      puts "Enter 13 to view the list of trains at the station"
+      puts "Enter 14 to view the list of cars at the train"
+      puts "Enter 15 to view the full list of trains at all stations"
       puts "Enter 0 to terminate the program"
       puts "---------------------------------------------------------------"
 
@@ -57,15 +60,21 @@ class RailRoad
         when 7
           add_carriage
         when 8
-          unhook_wagon
+          fill_car_volume
         when 9
-          move_train_forward
+          unhook_wagon
         when 10
-          move_train_back
+          move_train_forward
         when 11
-          stations_list
+          move_train_back
         when 12
+          stations_list
+        when 13
           trains_on_stations_list
+        when 14
+          cars_list
+        when 15
+          full_trains_list_at_stations
         else
           raise ArgumentError, "Input error. Use the command number from 0 to 12"
       end
@@ -104,10 +113,10 @@ class RailRoad
     trains['CAR-43'] = CargoTrain.new('CAR-43')
     trains['CAR-78'] = CargoTrain.new('CAR-78')
 
-    #1.times { trains['PAS-71'].add_car(PassengerCar.new(10)) }
-    2.times { trains['PAS-52'].add_car(PassengerCar.new(10)) }
-    3.times { trains['CAR-43'].add_car(CargoCar.new(10)) }
-    4.times { trains['CAR-78'].add_car(CargoCar.new(10)) }
+    12.times { trains['PAS-71'].add_car(PassengerCar.new(40)) }
+    10.times { trains['PAS-52'].add_car(PassengerCar.new(40)) }
+    13.times { trains['CAR-43'].add_car(CargoCar.new(100)) }
+    14.times { trains['CAR-78'].add_car(CargoCar.new(100)) }
 
     trains['PAS-71'].accept_route(routes['Kazan - Moscow'])
     trains['PAS-52'].accept_route(routes['Moscow - Kazan'])
@@ -272,28 +281,21 @@ class RailRoad
 
         volume = gets.chomp.to_i
 
-        if volume.between?(60,100)
-          selected_train.add_car(CargoCar.new(volume))
-        else
-          raise ArgumentError, "An invalid volume value has been entered. The permissible range is 60-100"
-        end
+        selected_train.add_car(CargoCar.new(volume))
 
       when :passenger
-        puts "Enter the value of the number of seats in the car (the acceptable range of values is 30-120 places)"
+        puts "Enter the value of the number of seats in the car (the acceptable range of values is 20-80 places)"
 
         seats = gets.chomp.to_i
 
-        if seats.between?(30,120)
-          selected_train.add_car(PassengerCar.new(seats))
-        else
-          raise ArgumentError, "Invalid places value entered. The acceptable range is 30-120"
-        end
+        selected_train.add_car(PassengerCar.new(seats))
+
     end
 
     puts "The carriage has been added to train number #{selected_train.number}. Total cars in the train: #{selected_train.car_list.count}"
 
     rescue ArgumentError => e
-    puts e.message
+    puts "Error! " + e.message
     retry
   end
 
@@ -362,16 +364,72 @@ class RailRoad
   end
 
   def cars_list
-    return data_error if trains_list.empty?
+    raise RuntimeError, "No trains created" if trains_list.empty?
 
-    puts "Enter the number of the required car"
+    puts "Enter the number of the required train"
     puts train_list_with_index
 
     selection = gets.chomp
     selected_train = selected_train(selection)
 
-    raise "There are no attached cars on the train #{selected_train.number}" if selected_train.car_list.empty?
-    selected_train.each_car(&information_about_cars)
+    raise RuntimeError, "There are no attached cars on the train #{selected_train.number}" if selected_train.car_list.empty?
+
+    selected_train.each_car do |car, index|
+      case car.type
+        when :cargo
+          puts "Car number: #{index}, car type: #{car.type}, free volume: #{car.free_volume} m3, occupied volume: #{car.occupied_volume} m3"
+        when :passenger
+          puts "Car number: #{index}, car type: #{car.type}, free seats: #{car.available_seats}, occupied seats: #{car.occupied_seats}"
+      end
+    end
+
+    rescue RuntimeError => e
+    puts e.message
+    retry
+  end
+
+  def full_trains_list_at_stations
+    raise RuntimeError, "No trains created" if trains_list.empty?
+    raise RuntimeError, "No stations created" if station_list.empty?
+
+    stations.values.each.with_index(1) do |station, index_s|
+      puts "#{index_s}: #{station.title}"
+      puts "      There are no trains at the station" if station.train_list.empty?
+
+      station.each_train { |train, index| puts "      #{index}: #{train.number}" }
+    end
+
+    rescue RuntimeError => e
+    puts e.message
+  end
+
+  def fill_car_volume
+    raise RuntimeError, "No trains created" if trains_list.empty?
+
+    puts "Enter the number of the required train"
+    puts train_list_with_index
+
+    selection = gets.chomp
+    selected_train = selected_train(selection)
+
+    raise RuntimeError, "There are no attached cars on the train #{selected_train.number}" if selected_train.car_list.empty?
+
+    puts "Enter the number of the required car"
+    selected_train.each_car { |car, index| puts "Car number #{index}" }
+
+    selected_car = gets.chomp
+    selected_car = selected_train.car_list[selected_car.to_i - 1]
+
+    case selected_car.type
+      when :cargo
+        puts "Enter the volume to be filled in (m3) (free volume #{selected_car.free_volume} m3)"
+        volume = gets.chomp.to_f
+        selected_car.fill_a_volume(volume)
+        puts "Car added #{volume} m3, free volume #{selected_car.free_volume} m3"
+      when :passenger
+        selected_car.take_a_seat
+        puts "The seat is occupied, there are #{selected_car.available_seats} empty seats"
+    end
   end
 
   def station_list
@@ -422,8 +480,4 @@ end
 #irb -r ./main.rb
 rr = RailRoad.new
 rr.load_seeds
-#rr.menu
-
-rr.cars_list
-
-
+rr.menu
