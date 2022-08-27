@@ -16,8 +16,6 @@ class PassengerCar < Car
   private
 
   def validate!
-    unless @total_volume.between?(20, 80)
-      raise ArgumentError, 'Invalid places value entered. The acceptable range is 20-80'
-    end
+    raise ArgumentError, 'Invalid value entered. The acceptable range is 20-80' unless @total_volume.between?(20, 80)
   end
 end

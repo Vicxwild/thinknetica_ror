@@ -52,8 +52,12 @@ class Station
   def validate!
     errors = []
     errors << "This station station already exists" if station?
-    errors << "Use only letters, numbers and spaces; the length should not exceed 20 characters" if @title !~ TITLE_PATTERN
+    errors << "Use only letters, numbers and spaces; the length should not exceed 20 characters" if @title
     raise errors.join(". ") unless errors.empty?
+  end
+
+  def title?
+    @title !~ TITLE_PATTERN
   end
 
   def station?

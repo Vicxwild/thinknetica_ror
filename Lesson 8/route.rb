@@ -19,7 +19,7 @@ class Route
   end
 
   def show_stations
-    stations.map { |station| station.title }
+    stations.map(&:title)
   end
 
   def position(station)
