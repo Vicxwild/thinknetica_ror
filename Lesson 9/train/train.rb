@@ -10,9 +10,6 @@ class Train
 
   attr_reader :car_list, :speed, :route, :station, :type, :current_station, :number
 
-  #NUMBER_PATTERN = /^[а-яa-z\d]{3}-?[а-яa-z\d]{2}$/i.freeze
-  #TYPE_PATTERN = /^cargo$|^passenger$/.freeze
-
   @@all_trains = {}
 
   def self.find(number)
@@ -23,7 +20,7 @@ class Train
     @number = number
     @type = type
     @speed = 0
-    TrainValidator.new({number: number, type: type}).validate!
+    TrainValidator.new({ number: number, type: type }).validate!
     @car_list = []
     @@all_trains[number] = self
     register_instance

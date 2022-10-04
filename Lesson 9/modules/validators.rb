@@ -7,7 +7,6 @@ class StationValidator
 
   validate :title, :format, TITLE_PATTERN
   validate :title, :type, String
-
 end
 
 class TrainValidator
@@ -29,5 +28,5 @@ class CarValidator
   validate :type, :format, TYPE_PATTERN
 end
 
-#p TrainValidator.new({number: "123-12", type: :cargo}).valid?
-#p StationValidator.new({title: "Port"}).valid?
+# p TrainValidator.new({number: "123-12", type: :cargo}).valid?
+# p StationValidator.new({title: "Port"}).valid?

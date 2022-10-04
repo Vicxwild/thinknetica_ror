@@ -14,7 +14,7 @@ class Car
     @type = type
     @total_volume = total_volume
     @occupied_volume = 0
-    CarValidator.new({type: type}).validate!
+    CarValidator.new({ type: type }).validate!
   end
 
   def free_volume

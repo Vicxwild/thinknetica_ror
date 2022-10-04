@@ -6,8 +6,6 @@ class Station
   include InstanceCounter
   include Validation
 
-  TITLE_PATTERN = /^[a-zа-я\d\s]{2,20}$/i.freeze
-
   attr_reader :train_list, :title
 
   @@stations = []
@@ -18,7 +16,7 @@ class Station
 
   def initialize(title)
     @title = title
-    StationValidator.new({title: title}).validate!
+    StationValidator.new({ title: title }).validate!
     @train_list = []
     @@stations << self
     register_instance
